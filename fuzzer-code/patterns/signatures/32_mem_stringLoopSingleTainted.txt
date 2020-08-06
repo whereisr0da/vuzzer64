@@ -1,0 +1,3 @@
+32 $B mem $C $D(INC_NEW_LINE) $D $D $D * * * * * * * * * * * * $NOT($VAL) $VAL
+WHILE_SAME_LAST_PATTERN_LINE(1)
+32 $B mem $C $D               $D $D $D * * * * * * * * * * * * $VAL       $VAL

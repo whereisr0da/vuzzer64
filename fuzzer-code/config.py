@@ -30,6 +30,64 @@ LIBS=" "
 # set file path to read executed BBs and their respective frequencies
 BBOUT=mydir + "/outd/bbc.out"
 
+# enable the writing of each log_print in the vuzzerRun.log file
+WRITELOG=False
+
+# show debug information during the fuzzing process
+DEBUGINFO=False
+
+# enable taint analysis interpretation
+# NOTE : current useless, maybe someone will find something to deal with this in the future
+TAINTOFFSETINTERPRETATION=False
+
+# enable the child input generation algorithm
+# NOTE : you need to read the documentation to clearly understand this
+#        but know that more the POPSIZE is higher, more child will be created
+HEAVYCHILDINPUTCREATION=False
+
+# set the application of taint based changes to child input
+APPLYTAINTTOCHILDINPUTS=False
+
+# set the child input randomness 
+# NOTE : 1.0 = all inputs are passed
+# NOTE : if you use ALFCHILDINPUTREDUCTION, this should be set to 1.0
+CHILDINPUTCREATIONRANDOMNESS=0.7
+
+# set the maximum number of child input generated
+# NOTE : lower the POPSIZE is, lower the chance that this number is reached is
+# NOTE : tests shows that 500 is the good number, why ? probably black magic
+CHILDINPUTMAXSIZE=500
+
+# population size in each generation. Choose even number.
+POPSIZE=500
+
+# set the number of mutation applied to the input during the mutation process
+# NOTE : must be low if you want good results
+MUTATIONPERINPUT=2
+
+# enable comparison duplicate filtering
+# NOTE : should be false if you use pattern detection
+FILTERDUPLICATED=False
+
+# enable pattern detection with pattern of the patterns/definitions directory
+USEPATTERNDETECTION=False
+
+# show debug information of pattern system
+SHOWDEBUGPATTERN=False
+
+# ---------------------------------------------------
+# AFL-CMIN input reduction part
+# ---------------------------------------------------
+
+# AFL-CMIN path (ex: /opt/afl/afl-cmin)
+ALFCMINEXECUTABLEPATH=''
+
+# enable the input reduction after classic input generation
+ALFINPUTREDUCTION=False
+
+# enable the input reduction after child input generation
+ALFCHILDINPUTREDUCTION=False
+
 # Set file path for crash hash info (this cannot be changed as pintool writes to this file)
 CRASHFILE='crash.bin'
 
@@ -63,7 +121,13 @@ LIBOFFSETS=[]
 #SUTARG=["-fast","##"]
 
 #this flag is set if we want to delete output files created by the SUT on executing each input.
-CLEANOUT=False
+CLEANOUT=True
+
+# TODO 
+CLEARSPECIALOUTPUT=False
+
+# TODO
+SPECIALOUTPUT="/mnt/hgfs/project/vuzzer64/fuzzer-code/datatemp/mp3/test.wav"
 
 #this is set to consider any operand of CMP (normally it should be False)
 ALLCMPOP=False#True
@@ -143,8 +207,6 @@ SPECIALBITVECTORS=dict()# dicntionarty to keep bitvectors for the special inputs
 ALLSTRINGS=[]# this will be populated by two sets A,B. A= set of full strings from binary. B= set of individual bytes from the binary.
 NOFFBYTES=True # this is a flag to ignore \xff\xff\xff\xff (which is -1) immediate.
 ALLBYTES=False#True # due to certain reason, i am ignoring certain bytes, eg. \x00, \xff. if we want to check them, make is True.
-# population size in each generation. Choose even number.
-POPSIZE=500
 
 # for elitist approach, set number of best inputs to go in the next generation. Make sure that POPSIZE-BESTP is multiple of 2.
 BESTP=40
@@ -168,7 +230,7 @@ PROBMUT=0.9#0.8
 
 # set the probability of choosing MOSTCOMMON last value for a offset. Larger the value, more probability of chossing last value (default should be 8)
 MOSTCOMNLAST= 6 #For LAva-M dataset, set this value to <=4
-RANDOMCOMN= True # this is to skip setting most common values for a offset sometimes. For LAVA-M, set this value to True.
+RANDOMCOMN= False # this is to skip setting most common values for a offset sometimes. For LAVA-M, set this value to True.
 
 # stoping condition "if found a crash, stop"
 STOPONCRASH=False 
@@ -191,7 +253,7 @@ BBSEENVECTOR=[] # list of BBs seen in a single generation
 TEMPERRORBB=set() # contains a set of blacklisted BBs that is populated across generations
 #NEWADDEDBB=0 # this is used to count newly added BBs in a generation, so that bit vectors for previous traces can be adjusted.
 BBPERCENT=90
- 
+CURRENTGEN=0
 # temporary directory for creating new generation of inputs
 
 TEMPDIR="datatemp/"
@@ -213,8 +275,8 @@ MAXFILELINE=200000
 ARCHLIL=True#False#True
 
 # this dictinary keeps offsets and their immediate values that are found in all the initial inputs. key=offset, value=list(immediate values in CMP). we also use negative offsets to mark bootom offsets in a file.
-MOSTCOMMON=dict()
-MORECOMMON=dict() #similar to mostcommon dict, but is used to keep common offsets-values pair for later generations. this is kept seperate because MOSTCOMMON based mutation sometimes takes values that were checked in CMP inst for other possible magicbytes!!
+MOSTCOMMON=list()
+MORECOMMON=list() #similar to mostcommon dict, but is used to keep common offsets-values pair for later generations. this is kept seperate because MOSTCOMMON based mutation sometimes takes values that were checked in CMP inst for other possible magicbytes!!
 MOSTCOMFLAG=False # flag to compute MOSTCOMMON offsets only once.
 MAXOFFSET=20 #this value is used to select mostcommon offsets in file. Offsets upto this value are used for such calculation.
 MINOFFSET=10 # this is to track offsets from the end of the file. so, if file size is 50 (offset 49), we write it as -1 (49-50), -2 (48-50), ... (50-MINOFFSET-50)
@@ -222,3 +284,5 @@ MAXINPUTLEN=50000 # this is the limit (50kb) on length of the input. After that 
 #pintool cmd: ../../../pin -tool_exit_timeout 1 -t obj-intel64/bbcounts.so -x 20 -l libjpeg -- /usr/bin/eog esu.png
 
 FLASK=False
+
+LASTTURNCODECOV=0
