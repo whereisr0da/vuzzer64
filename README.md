@@ -4,7 +4,7 @@ This is the github repo of my improved version of Vuzzer64.
 
 This is the code of my internship subject : Improvements of fuzzing techniques in Vuzzer
 
-I made a post on my blog about my research and all details of my improvements : https://hajjik666.blogspot.com/2020/08/improvements-of-fuzzing-techniques-in.html
+I made a post on my blog about my research and all details of my improvements : https://whereisr0da.blogspot.com/2020/08/improvements-of-fuzzing-techniques-in.html
 
 ## Context  :
 
